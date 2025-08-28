@@ -1,13 +1,18 @@
 # This file should be at the ROOT of your project folder.
 
+# [build] context: settings for production builds
 [build]
-  # Explicitly tell Netlify to build inside the frontend folder
-  command = "npm --prefix frontend run build"
-  
-  # The location of the built site, relative to the project root
-  publish = "frontend/dist"
+  # Base directory: All commands will run from this directory.
+  # This tells Netlify to 'cd' into 'frontend' before doing anything else.
+  base = "frontend"
 
-# This rule tells Netlify how to handle API requests
+  # Build command: This is run from the 'base' directory.
+  command = "npm run build"
+
+  # Publish directory: This is where the built files are, relative to the 'base' directory.
+  publish = "dist"
+
+# [[redirects]] context: settings for proxying API requests
 [[redirects]]
   from = "/api/*"
   to = "https://njtwebgm.onrender.com/api/:splat"
