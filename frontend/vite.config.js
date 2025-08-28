@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   // This tells Vite that the root of your source code is the current directory.
-  root: '.',
+  // root: '.',
   build: {
     // This tells Vite to put the built files into a folder named 'dist'.
     outDir: 'dist',
