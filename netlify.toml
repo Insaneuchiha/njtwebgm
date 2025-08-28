@@ -1,10 +1,10 @@
 # This file should be at the ROOT of your project folder.
 
-# This tells Netlify to run the build commands from within the 'frontend' directory.
+# This tells Netlify how to build the project explicitly.
 [build]
-  base    = "frontend"
-  command = "npm run build"
-  # This tells Netlify where to find the built site, relative to the project root.
+  # 1. Change directory into the 'frontend' folder, then run the build command.
+  command = "cd frontend && npm run build"
+  # 2. Specify the location of the built site, relative to the project root.
   publish = "frontend/dist"
 
 # This rule tells Netlify how to handle API requests
