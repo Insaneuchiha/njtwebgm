@@ -33,12 +33,15 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    flexWrap: 'wrap', // Allow items to wrap to the next line on small screens
+    gap: '1rem', // Add some space when items wrap
   },
   logo: {
     fontSize: '1.8rem',
     fontWeight: 'bold',
     margin: 0,
     color: '#2c3e50',
+    flexShrink: 0, // Prevent the logo from shrinking
   },
   navLinks: {
     listStyle: 'none',
