@@ -1,0 +1,14 @@
+# This file should be at the ROOT of your project folder.
+
+# This tells Netlify to run the build commands from within the 'frontend' directory.
+[build]
+  base    = "frontend"
+  command = "npm run build"
+  # This tells Netlify where to find the built site, relative to the project root.
+  publish = "frontend/dist"
+
+# This rule tells Netlify how to handle API requests
+[[redirects]]
+  from = "/api/*"
+  to = "https://njtwebgm.onrender.com/api/:splat"
+  status = 200
