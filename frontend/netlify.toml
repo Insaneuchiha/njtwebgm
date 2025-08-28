@@ -5,7 +5,7 @@
   # The command to build your site
   command = "npm run build"
   # The directory that contains your built site
-  publish = "frontend/dist"
+  publish = "dist"
   # The directory where your source code is located
   base = "frontend"
 
