@@ -1,13 +1,26 @@
-[build]
-  base = "frontend"
-  command = "npm run build"
-  publish = "dist"   # change to "build" if CRA
+# This file should be at the ROOT of your project folder.
 
+# [build] context: settings for production builds
+[build]
+  # Base directory: All commands will run from this directory.
+  # This tells Netlify to 'cd' into 'frontend' before doing anything else.
+  base = "frontend"
+
+  # Build command: This is run from the 'base' directory.
+  command = "npm run build"
+
+  # Publish directory: This is where the built files are, relative to the 'base' directory.
+  publish = "dist"
+
+# [[redirects]] context: settings for proxying API requests
 [[redirects]]
   from = "/api/*"
   to = "https://njtwebgm.onrender.com/api/:splat"
   status = 200
 
+# This is a catch-all rule for Single Page Applications (SPAs) like React.
+# It ensures that any request that isn't for a specific file is
+# redirected to your main index.html file, allowing React to handle the routing.
 [[redirects]]
   from = "/*"
   to = "/index.html"
