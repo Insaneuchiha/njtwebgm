@@ -42,9 +42,7 @@ const LoginPage = ({ onLoginSuccess }) => {
           required
         />
         <button type="submit" style={styles.button}>Login</button>
-        <p style={styles.registerLink}>
-          Need an account? <a href="/#register">Register</a>
-        </p>
+        {/* The registration link has been removed for security. */}
       </form>
     </div>
   );
@@ -87,10 +85,6 @@ const styles = {
     textAlign: 'center',
     marginBottom: '10px',
   },
-  registerLink: {
-    textAlign: 'center',
-    marginTop: '20px',
-  }
 };
 
 export default LoginPage;
