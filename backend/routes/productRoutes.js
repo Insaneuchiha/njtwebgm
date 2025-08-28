@@ -2,8 +2,6 @@
 
 import express from 'express';
 const router = express.Router();
-
-// Import the controller functions we created earlier.
 import {
   getProducts,
   setProduct,
@@ -11,14 +9,14 @@ import {
   deleteProduct,
 } from '../controllers/productController.js';
 
-// This is a clean way to chain routes that go to the same URL.
-// A GET request to '/api/products' will trigger the getProducts function.
-// A POST request to '/api/products' will trigger the setProduct function.
-router.route('/').get(getProducts).post(setProduct);
+// Import our new protect middleware
+import { protect } from '../middleware/authMiddleware.js';
 
-// A PUT request to '/api/products/:id' will trigger the updateProduct function.
-// A DELETE request to '/api/products/:id' will trigger the deleteProduct function.
-router.route('/:id').put(updateProduct).delete(deleteProduct);
+// The GET route for all products remains public.
+// For the POST route, we add 'protect' middleware. It will run BEFORE the setProduct controller.
+router.route('/').get(getProducts).post(protect, setProduct);
 
-// Export the router so our main server file can use it.
+// The PUT and DELETE routes are also protected.
+router.route('/:id').put(protect, updateProduct).delete(protect, deleteProduct);
+
 export default router;

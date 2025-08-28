@@ -2,10 +2,9 @@
 
 import axios from 'axios';
 
-// The base URL of our backend API.
 const API_URL = 'http://localhost:5000/api/products/';
 
-// Function to get all products from the backend.
+// Function to get all products from the backend (this is a public route)
 const getProducts = async () => {
   try {
     const response = await axios.get(API_URL);
@@ -16,24 +15,44 @@ const getProducts = async () => {
   }
 };
 
-// Function to create a new product.
+// Function to create a new product (this is a protected route)
 const createProduct = async (productData) => {
+  // 1. Get the logged-in user's data from local storage.
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  // 2. Create the config object for the request headers.
+  //    We need to include the user's token to authorize the request.
+  const config = {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
+
   try {
-    // Make a POST request to the API with the new product data.
-    const response = await axios.post(API_URL, productData);
+    // 3. Pass the product data AND the config object to the POST request.
+    const response = await axios.post(API_URL, productData, config);
     return response.data;
   } catch (error) {
     console.error('Error creating product:', error);
-    // Re-throw the error to be caught by the component.
     throw error;
   }
 };
 
-// Function to delete a product by its ID.
+// Function to delete a product by its ID (this is a protected route)
 const deleteProduct = async (productId) => {
+  // 1. Get the user's token.
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  // 2. Create the config object with the Authorization header.
+  const config = {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
+
   try {
-    // Make a DELETE request to the specific product's URL.
-    const response = await axios.delete(API_URL + productId);
+    // 3. Pass the config object to the DELETE request.
+    const response = await axios.delete(API_URL + productId, config);
     return response.data;
   } catch (error) {
     console.error('Error deleting product:', error);
