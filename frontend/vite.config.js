@@ -6,10 +6,12 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // This tells Vite that the root of your source code is the current directory.
-  // root: '.',
+  // This is the crucial change.
+  // It tells Vite to generate asset paths as absolute paths (e.g., /assets/index.js)
+  // instead of relative paths. This is essential for single-page applications
+  // to work correctly when deployed.
+  base: '/',
   build: {
-    // This tells Vite to put the built files into a folder named 'dist'.
     outDir: 'dist',
   },
 });
