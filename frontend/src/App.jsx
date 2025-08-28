@@ -10,14 +10,11 @@ import Footer from './components/Footer';
 import authService from './services/authService';
 
 function App() {
-  // State to hold the logged-in user's data
   const [user, setUser] = useState(null);
-  // State to switch between login and register forms
-  const [showLogin, setShowLogin] = useState(true);
-  // State for the main view (home or admin)
-  const [currentView, setCurrentView] = useState('home');
+  // Read the current "route" from the URL hash (e.g., #login)
+  const [route, setRoute] = useState(window.location.hash.substring(1));
 
-  // Check for a logged-in user in local storage when the app loads
+  // Check for a logged-in user in local storage when the app first loads
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem('user'));
     if (loggedInUser) {
@@ -25,95 +22,52 @@ function App() {
     }
   }, []);
 
+  // Listen for changes in the URL hash to update the view
+  useEffect(() => {
+    const handleHashChange = () => {
+      setRoute(window.location.hash.substring(1));
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   const handleLogin = () => {
     const loggedInUser = JSON.parse(localStorage.getItem('user'));
     setUser(loggedInUser);
+    window.location.hash = 'admin'; // Go to the admin panel after login
   };
 
   const handleLogout = () => {
     authService.logout();
     setUser(null);
-    setCurrentView('home'); // Reset to home view on logout
+    window.location.hash = ''; // Go back to the home page after logout
   };
 
-  // If no user is logged in, show the Login/Register forms
-  if (!user) {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Navbar />
-        <main style={{ flex: 1 }}>
-          {showLogin ? (
-            <LoginPage onLoginSuccess={handleLogin} />
-          ) : (
-            <RegisterPage onRegisterSuccess={handleLogin} />
-          )}
-          <div style={{ textAlign: 'center', marginTop: '20px' }}>
-            <button onClick={() => setShowLogin(!showLogin)} style={styles.toggleButton}>
-              {showLogin ? 'Need an account? Register' : 'Have an account? Login'}
-            </button>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  // This function decides which page to show based on the URL hash
+  const renderPage = () => {
+    switch (route) {
+      case 'login':
+        return user ? <AdminPage /> : <LoginPage onLoginSuccess={handleLogin} />;
+      case 'register':
+        return user ? <AdminPage /> : <RegisterPage onRegisterSuccess={handleLogin} />;
+      case 'admin':
+        // This is a protected route. If no user, show login page.
+        return user ? <AdminPage /> : <LoginPage onLoginSuccess={handleLogin} />;
+      default:
+        // By default, always show the HomePage
+        return <HomePage />;
+    }
+  };
 
-  // If a user IS logged in, show the main application
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Navbar />
+      <Navbar user={user} onLogout={handleLogout} />
       <main style={{ flex: 1, width: '90%', maxWidth: '1200px', margin: '2rem auto' }}>
-        <div style={styles.navContainer}>
-          <button onClick={() => setCurrentView('home')} style={styles.navButton}>
-            User View
-          </button>
-          <button onClick={() => setCurrentView('admin')} style={styles.navButton}>
-            Admin Panel
-          </button>
-          <button onClick={handleLogout} style={styles.logoutButton}>
-            Logout
-          </button>
-        </div>
-        
-        {currentView === 'home' ? <HomePage /> : <AdminPage />}
+        {renderPage()}
       </main>
       <Footer />
     </div>
   );
 }
-
-const styles = {
-  toggleButton: {
-    background: 'none',
-    border: 'none',
-    color: '#007bff',
-    cursor: 'pointer',
-    textDecoration: 'underline',
-    fontSize: '1rem',
-  },
-  navContainer: {
-    textAlign: 'center',
-    marginBottom: '2rem',
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '10px',
-  },
-  navButton: {
-    padding: '10px 20px',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-  },
-  logoutButton: {
-    padding: '10px 20px',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    borderRadius: '5px',
-    border: '1px solid #dc3545',
-    backgroundColor: '#dc3545',
-    color: 'white',
-  },
-};
 
 export default App;

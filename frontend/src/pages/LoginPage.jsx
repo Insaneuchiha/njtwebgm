@@ -13,7 +13,6 @@ const LoginPage = ({ onLoginSuccess }) => {
     setError('');
     try {
       await authService.login({ email, password });
-      // Call the function passed from App.jsx to update the login state
       onLoginSuccess();
     } catch (err) {
       setError('Failed to login. Please check your credentials.');
@@ -43,18 +42,20 @@ const LoginPage = ({ onLoginSuccess }) => {
           required
         />
         <button type="submit" style={styles.button}>Login</button>
+        <p style={styles.registerLink}>
+          Need an account? <a href="/#register">Register</a>
+        </p>
       </form>
     </div>
   );
 };
 
-// Styling for the LoginPage
 const styles = {
   container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '80vh',
+    padding: '40px 0',
   },
   form: {
     display: 'flex',
@@ -86,6 +87,10 @@ const styles = {
     textAlign: 'center',
     marginBottom: '10px',
   },
+  registerLink: {
+    textAlign: 'center',
+    marginTop: '20px',
+  }
 };
 
 export default LoginPage;

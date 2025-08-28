@@ -1,0 +1,19 @@
+# frontend/netlify.toml
+
+# This is the build configuration for Netlify
+[build]
+  # The command to build your site
+  command = "npm run build"
+  # The directory that contains your built site
+  publish = "frontend/dist"
+  # The directory where your source code is located
+  base = "frontend"
+
+# This rule tells Netlify how to handle API requests
+[[redirects]]
+  # For any request that starts with /api/
+  from = "/api/*"
+  # Forward it to your live Render backend URL
+  to = "https://njtwebgm.onrender.com/api/:splat"
+  # Respond with a 200 status code (OK)
+  status = 200
