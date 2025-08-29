@@ -13,7 +13,13 @@ import { protect } from '../middleware/authMiddleware.js';
 router.route('/').get(getProducts).post(protect, setProduct);
 
 // **THE FIX IS HERE**
-// The route for getting a single product was ':/id' and has been corrected to '/:id'
-router.route('/:id').get(getProductById).put(protect, updateProduct).delete(protect, deleteProduct);
+// The path was missing a forward slash before the colon.
+// It should be '/:id', not ':/id'.
+router
+  .route('/:id')
+  .get(getProductById)
+  .put(protect, updateProduct)
+  .delete(protect, deleteProduct);
 
 export default router;
+
