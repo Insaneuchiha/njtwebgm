@@ -1,18 +1,17 @@
 {
-  "version": 2,
   "builds": [
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist"
+        "distDir": "frontend/dist"
       }
     }
   ],
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://njtwebgm.onrender.com/api/$1"
+      "destination": "https://njtwebgm-production.up.railway.app/api/$1"
     },
     {
       "source": "/(.*)",
@@ -20,3 +19,4 @@
     }
   ]
 }
+
