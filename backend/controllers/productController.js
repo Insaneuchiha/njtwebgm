@@ -98,8 +98,9 @@ const deleteProduct = async (req, res) => {
 
 export {
   getProducts,
-  getProductById, // This was missing from the exports
+  getProductById,
   setProduct,
   updateProduct,
   deleteProduct,
 };
+

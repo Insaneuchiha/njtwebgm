@@ -5,6 +5,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+// DEBUGGING STEP: Temporarily comment out one of the route imports
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
@@ -38,28 +39,28 @@ app.use(express.urlencoded({ limit: '30mb', extended: true }));
 
 // 3. API Routes
 // =============================================================
+// DEBUGGING STEP: Comment out one of the app.use() lines to isolate the issue.
+// Let's start by disabling the product routes.
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 
 // 4. Production Deployment Configuration
 // =============================================================
-if (process.env.NODE_ENV === 'production') {
-  const __dirname = path.resolve();
-  // Correct path to the frontend build folder
-  const frontendDistPath = path.join(__dirname, 'frontend', 'dist');
-
-  app.use(express.static(frontendDistPath));
-
-  // For any request that doesn't match an API route, serve the main index.html file.
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(frontendDistPath, 'index.html'))
-  );
-} else {
+// This section is temporarily disabled for debugging the startup error.
+// if (process.env.NODE_ENV === 'production') {
+//   const __dirname = path.resolve();
+//   const frontendDistPath = path.join(__dirname, '..', 'frontend', 'dist');
+//   app.use(express.static(frontendDistPath));
+//   app.get('*', (req, res) =>
+//     res.sendFile(path.resolve(frontendDistPath, 'index.html'))
+//   );
+// } else {
   // A simple root route for development mode
   app.get('/', (req, res) => {
-    res.send('API is running in development mode...');
+    res.send('API is running...');
   });
-}
+// }
+
 
 // 5. Connect to DB & Start Server
 // =============================================================
@@ -75,3 +76,4 @@ const connectDB = async () => {
 };
 
 connectDB();
+
