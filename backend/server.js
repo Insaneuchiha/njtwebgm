@@ -4,8 +4,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-// We are commenting this out to see if the server starts without it.
-// import productRoutes from './routes/productRoutes.js'; 
+import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
 // 1. Initialize App & Environment
@@ -17,8 +16,8 @@ dotenv.config();
 // =============================================================
 // --- CORS Configuration ---
 const allowedOrigins = [
-  'http://localhost:5173', 
-  'https://njtwebgm.vercel.app', 
+  'http://localhost:5173',
+  'https://njtwebgm.vercel.app',
 ];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -37,8 +36,7 @@ app.use(express.urlencoded({ limit: '30mb', extended: true }));
 
 // 3. API Routes
 // =============================================================
-// We are commenting this out to isolate the error.
-// app.use('/api/products', productRoutes); 
+app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 
 // 4. Production Deployment Configuration
