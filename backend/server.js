@@ -19,12 +19,10 @@ dotenv.config();
 const allowedOrigins = [
   'http://localhost:5173', // For local development
   'https://njtwebgm.vercel.app', // Your live frontend URL
-  // Add any other domains you want to allow, like a custom domain
+  // Add your custom domain here once you set it up
 ];
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    // or from an allowed origin
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -40,24 +38,23 @@ app.use(express.urlencoded({ limit: '30mb', extended: true }));
 
 // 3. API Routes
 // =============================================================
-// Your API routes should be defined before the production static file handling.
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 
 // 4. Production Deployment Configuration
 // =============================================================
-// This section must be placed AFTER all of your API routes.
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
 
-  // Set the static assets folder for the built React app
-  app.use(express.static(path.join(__dirname, 'frontend/dist')));
+  // ** THE FIX IS HERE **
+  // We need to go up one directory from `backend` to find the `frontend/dist` folder.
+  const frontendDistPath = path.join(__dirname, '..', 'frontend', 'dist');
 
-  // For any request that doesn't match an API route,
-  // serve the main index.html file from the React build.
-  // This is crucial for client-side routing to work.
+  app.use(express.static(frontendDistPath));
+
+  // For any request that doesn't match an API route, serve the main index.html file.
   app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'))
+    res.sendFile(path.resolve(frontendDistPath, 'index.html'))
   );
 } else {
   // A simple root route for development mode
@@ -75,7 +72,9 @@ const connectDB = async () => {
     app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
   } catch (error) {
     console.error('Connection to MongoDB failed:', error.message);
+    process.exit(1); // Exit process with failure
   }
 };
 
 connectDB();
+
