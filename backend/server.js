@@ -17,7 +17,7 @@ dotenv.config();
 // --- CORS Configuration ---
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://njtwebgm.vercel.app',
+  'https://njtwebgm.vercel.app', 
 ];
 const corsOptions = {
   origin: function (origin, callback) {
